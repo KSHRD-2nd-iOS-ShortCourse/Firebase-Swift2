@@ -22,6 +22,7 @@
 		4043AC5DC1DFEF6968372E3C /* Pods-FirebaseDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FirebaseDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-FirebaseDemo/Pods-FirebaseDemo.release.xcconfig"; sourceTree = "<group>"; };
 		5BB6123A2D02D478D2740E8B /* Pods_FirebaseDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FirebaseDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FBED2B21DC351E3004C250E /* HomeCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewController.swift; sourceTree = "<group>"; };
+		6FBED2B41DC35590004C250E /* FirebaseDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FirebaseDemo.entitlements; sourceTree = "<group>"; };
 		6FCC79CA1DC310AE00613755 /* SignUpTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpTableViewController.swift; sourceTree = "<group>"; };
 		6FD4D3961DC2E6BA00BE0266 /* FirebaseDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FirebaseDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FD4D3991DC2E6BA00BE0266 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -76,6 +77,7 @@
 		6FD4D3981DC2E6BA00BE0266 /* FirebaseDemo */ = {
 			isa = PBXGroup;
 			children = (
+				6FBED2B41DC35590004C250E /* FirebaseDemo.entitlements */,
 				6FD4D3991DC2E6BA00BE0266 /* AppDelegate.swift */,
 				6FD4D39B1DC2E6BA00BE0266 /* SignInTableViewController.swift */,
 				6FD4D39D1DC2E6BA00BE0266 /* Main.storyboard */,
@@ -132,6 +134,12 @@
 				TargetAttributes = {
 					6FD4D3951DC2E6BA00BE0266 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 43QY5VP5JV;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -339,6 +347,7 @@
 			baseConfigurationReference = AB9E8C0BB2FB4E62C4F3EDA3 /* Pods-FirebaseDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FirebaseDemo/FirebaseDemo.entitlements;
 				INFOPLIST_FILE = FirebaseDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.kshrd.FirebaseDemo;
@@ -351,6 +360,7 @@
 			baseConfigurationReference = 4043AC5DC1DFEF6968372E3C /* Pods-FirebaseDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FirebaseDemo/FirebaseDemo.entitlements;
 				INFOPLIST_FILE = FirebaseDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.kshrd.FirebaseDemo;

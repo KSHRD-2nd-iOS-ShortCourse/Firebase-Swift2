@@ -38,33 +38,30 @@ class SignUpTableViewController: UITableViewController {
     
     @IBAction func signUpAction(sender: AnyObject) {
         FIRAuth.auth()?.createUserWithEmail(usernameTextField.text!, password: passwordTextField.text!) { (user, error) in
-          
+            
             // Create account error
             if error != nil {
-                print("Error \(error.debugDescription)")
-                return
-            }
-            
-            
-            if self.emailVerificationSwitch.on {
-                if let user = FIRAuth.auth()?.currentUser{
-                    user.sendEmailVerificationWithCompletion({ error in
+                print("Error \(error?.localizedDescription)")
+            }else{
+                if self.emailVerificationSwitch.on {
+                    user!.sendEmailVerificationWithCompletion({ error in
                         if let error = error {
                             // An error happened.
-                            print("Error \(error.debugDescription)")
+                            print("Error \(error.localizedDescription)")
                         } else {
                             // Email sent.
-                            print("Email sent")
+                            print("Email sent to \(user?.email!)")
                         }
                     })
-                }
-            }else{
-                if let user = FIRAuth.auth()?.currentUser {
-                    // User is signed in.
-                    print(user.email)
-                } else {
-                    // No user is signed in.
-                    print("NO User")
+                }else{
+                    print("No Email Sent")
+//                    if let user = FIRAuth.auth()?.currentUser {
+//                        // User is signed in.
+//                        print(user.email)
+//                    } else {
+//                        // No user is signed in.
+//                        print("NO User")
+//                    }
                 }
             }
         }

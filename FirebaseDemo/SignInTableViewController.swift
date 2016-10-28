@@ -41,13 +41,13 @@ class SignInTableViewController: UITableViewController {
     @IBAction func signIn(sender: AnyObject) {
         
         FIRAuth.auth()?.signInWithEmail(usernameTextField.text!, password: passwordTextField.text!) { (user, error) in
-            
             if error != nil {
                 print("Error \(error.debugDescription)")
                 return
             }
             if let user = FIRAuth.auth()?.currentUser {
-                if !user.emailVerified{
+                
+                if !user.emailVerified {
                     let alertVC = UIAlertController(title: "Verify Email", message: "Sorry. Your email address has not yet been verified. Please verify your email!", preferredStyle: .Alert)
                     let alertActionOkay = UIAlertAction(title: "Okay", style: .Default) {
                         (_) in
