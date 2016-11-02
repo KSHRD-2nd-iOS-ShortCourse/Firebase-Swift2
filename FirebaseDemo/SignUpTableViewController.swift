@@ -21,13 +21,7 @@ class SignUpTableViewController: UITableViewController {
         super.viewDidLoad()
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    // MARK: - Table view data source
-    
+    // MARK: - Table view data source    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -44,17 +38,19 @@ class SignUpTableViewController: UITableViewController {
                 print("Error \(error?.localizedDescription)")
             }else{
                 if self.emailVerificationSwitch.on {
+                    print("----> Verification Turn On")
                     user!.sendEmailVerificationWithCompletion({ error in
                         if let error = error {
                             // An error happened.
                             print("Error \(error.localizedDescription)")
                         } else {
                             // Email sent.
-                            print("Email sent to \(user?.email!)")
+                            print("Email sent to \(user!.email!)")
                         }
                     })
                 }else{
-                    print("No Email Sent")
+                    print("----> Verification Turn Off")
+                    print("No Email Sent \(user!.email!)")
 //                    if let user = FIRAuth.auth()?.currentUser {
 //                        // User is signed in.
 //                        print(user.email)

@@ -19,23 +19,33 @@ class SignInTableViewController: UITableViewController {
     
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
-        
-        
       
-        FIRAuth.auth()?.addAuthStateDidChangeListener { auth, user in
-            if let user = user {
-                // User is signed in.
-                print(user.email)
-            } else {
-                // No user is signed in.
-                print("NO User")
-            }
+        if let user = FIRAuth.auth()?.currentUser {
+            // User is signed in.
+            print("DidChangeListener : \(user.email!)")
+            print ("Email verified. Signing in...\(user.email!)")
+            self.performSegueWithIdentifier("showHome", sender: nil)
+            
+        } else {
+            // No user is signed in.
+            print("DidChangeListener : NO user sign in")
         }
+        
+//        FIRAuth.auth()?.addAuthStateDidChangeListener { auth, user in
+//            if let user = user {
+//                // User is signed in.
+//                print("DidChangeListener : \(user.email!)")
+//                print ("Email verified. Signing in...\(user.email!)")
+//                self.performSegueWithIdentifier("showHome", sender: nil)
+//                
+//            } else {
+//                // No user is signed in.
+//                print("DidChangeListener : NO user sign in")
+//            }
+//        }
     }
 
     @IBAction func signIn(sender: AnyObject) {
@@ -59,8 +69,9 @@ class SignInTableViewController: UITableViewController {
                     alertVC.addAction(alertActionCancel)
                     self.presentViewController(alertVC, animated: true, completion: nil)
                 } else {
+                    print ("Email verified. Signing in...\(user.email!)")
                     self.performSegueWithIdentifier("showHome", sender: nil)
-                    print ("Email verified. Signing in...")
+                    
                 }
             }else{
                 print("No account \(error.debugDescription)")
@@ -109,7 +120,7 @@ class SignInTableViewController: UITableViewController {
                     print(error)
                 } else {
                     // Password reset email sent.
-                    print("Password reset email sent.")
+                    print("Password reset email sent. \(self.email)")
                 }
             }
         }
@@ -128,7 +139,7 @@ class SignInTableViewController: UITableViewController {
         let textField = notification.object as! UITextField
         
         email = textField.text!
-        print(email)
+        print("TextDidChangeNotification \(email)")
     }
 
 }
