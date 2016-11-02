@@ -59,6 +59,9 @@ class SignUpTableViewController: UITableViewController {
 //                        print("NO User")
 //                    }
                 }
+                
+                
+                try! FIRAuth.auth()?.signOut()
             }
         }
     }
