@@ -51,15 +51,7 @@ class SignUpTableViewController: UITableViewController {
                 }else{
                     print("----> Verification Turn Off")
                     print("No Email Sent \(user!.email!)")
-//                    if let user = FIRAuth.auth()?.currentUser {
-//                        // User is signed in.
-//                        print(user.email)
-//                    } else {
-//                        // No user is signed in.
-//                        print("NO User")
-//                    }
                 }
-                
                 
                 try! FIRAuth.auth()?.signOut()
             }

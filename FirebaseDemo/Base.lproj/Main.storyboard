@@ -113,6 +113,38 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="g8w-Vw-5I3">
+                                        <rect key="frame" x="0.0" y="320" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="g8w-Vw-5I3" id="cdR-V3-hWF">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uym-3b-z5d">
+                                                    <rect key="frame" x="177" y="7" width="135" height="30"/>
+                                                    <state key="normal" title="Facebook"/>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OZp-f0-UC3" customClass="FBSDKLoginButton">
+                                                    <rect key="frame" x="8" y="7" width="135" height="30"/>
+                                                    <state key="normal" title="Facebook"/>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="j7X-X4-EAv">
+                                        <rect key="frame" x="0.0" y="364" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="j7X-X4-EAv" id="r76-ci-4aU">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="tzP-CB-8yl">
+                                                    <rect key="frame" x="142" y="3" width="37" height="37"/>
+                                                    <color key="color" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </activityIndicatorView>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -123,6 +155,9 @@
                     </tableView>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
+                        <outlet property="facebookButton" destination="OZp-f0-UC3" id="02A-fn-xAQ"/>
+                        <outlet property="facebookCustomButton" destination="Uym-3b-z5d" id="gsI-Nb-ei2"/>
+                        <outlet property="loadingIndicator" destination="tzP-CB-8yl" id="EwS-il-gfs"/>
                         <outlet property="passwordTextField" destination="5rc-Jd-PQu" id="cMD-4h-qAP"/>
                         <outlet property="usernameTextField" destination="b88-xz-RQB" id="hIY-vb-Luv"/>
                         <segue destination="yTb-s6-wVd" kind="show" identifier="showHome" id="sG1-xN-TOw"/>

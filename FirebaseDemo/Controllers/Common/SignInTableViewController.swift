@@ -8,95 +8,86 @@
 
 import UIKit
 import FirebaseAuth
+import FBSDKLoginKit
 
-class SignInTableViewController: UITableViewController {
-
+class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate {
+    
     var email = ""
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     
-    @IBAction func backToSignIn(segue : UIStoryboardSegue){
+    @IBOutlet var facebookCustomButton: UIButton!
+    @IBOutlet var facebookButton: FBSDKLoginButton!
     
+    @IBOutlet var loadingIndicator: UIActivityIndicatorView!
+    
+    
+    @IBAction func backToSignIn(segue : UIStoryboardSegue){
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-      
-        if let user = FIRAuth.auth()?.currentUser {
+        
+        // Add delegate for FacebookButton
+        facebookButton.readPermissions = ["public_profile", "email", "user_friends"]
+        facebookButton.delegate = self
+        
+        // Custom Button property
+        facebookCustomButton.backgroundColor = UIColor.blueColor()
+        facebookCustomButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        facebookCustomButton.addTarget(self, action: #selector(handleCustomFBLogin), forControlEvents: .TouchUpInside)
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        // Check Firebase current user
+        if let user = FIRAuth.auth()?.currentUser{
             // User is signed in.
-            print("DidChangeListener : \(user.email!)")
-            print ("Email verified. Signing in...\(user.email!)")
+            print("DidChangeListener : \(user.email)")
+            print ("Email verified. Signing in...\(user.email)")
             self.performSegueWithIdentifier("showHome", sender: nil)
             
-        } else {
+        }else{
             // No user is signed in.
             print("DidChangeListener : NO user sign in")
         }
-        
-//        FIRAuth.auth()?.addAuthStateDidChangeListener { auth, user in
-//            if let user = user {
-//                // User is signed in.
-//                print("DidChangeListener : \(user.email!)")
-//                print ("Email verified. Signing in...\(user.email!)")
-//                self.performSegueWithIdentifier("showHome", sender: nil)
-//                
-//            } else {
-//                // No user is signed in.
-//                print("DidChangeListener : NO user sign in")
-//            }
-//        }
     }
-
+    
+    // MARK : Firebase SignIn
     @IBAction func signIn(sender: AnyObject) {
-        
+        // Firebase SignIn with Email
         FIRAuth.auth()?.signInWithEmail(usernameTextField.text!, password: passwordTextField.text!) { (user, error) in
+            
+            // If error occur
             if error != nil {
                 print("Error \(error.debugDescription)")
                 return
             }
-            if let user = FIRAuth.auth()?.currentUser {
-                
-                if !user.emailVerified {
-                    let alertVC = UIAlertController(title: "Verify Email", message: "Sorry. Your email address has not yet been verified. Please verify your email!", preferredStyle: .Alert)
-                    let alertActionOkay = UIAlertAction(title: "Okay", style: .Default) {
-                        (_) in
-                        user.sendEmailVerificationWithCompletion(nil)
-                    }
-                    let alertActionCancel = UIAlertAction(title: "Cancel", style: .Default, handler: nil)
-                    
-                    alertVC.addAction(alertActionOkay)
-                    alertVC.addAction(alertActionCancel)
-                    self.presentViewController(alertVC, animated: true, completion: nil)
-                } else {
-                    print ("Email verified. Signing in...\(user.email!)")
-                    self.performSegueWithIdentifier("showHome", sender: nil)
-                    
+            
+            // If no error, get signed in user
+            // Check email verified
+            if !(user!.emailVerified) {
+                let alertVC = UIAlertController(title: "Verify Email", message: "Sorry. Your email address has not yet been verified. Please verify your email!", preferredStyle: .Alert)
+                let alertActionOkay = UIAlertAction(title: "Okay", style: .Default) {
+                    (_) in
+                    user!.sendEmailVerificationWithCompletion(nil)
                 }
-            }else{
-                print("No account \(error.debugDescription)")
+                let alertActionCancel = UIAlertAction(title: "Cancel", style: .Default, handler: nil)
+                
+                alertVC.addAction(alertActionOkay)
+                alertVC.addAction(alertActionCancel)
+                self.presentViewController(alertVC, animated: true, completion: nil)
+            } else {
+                print ("Email verified. Signing in...\(user!.email!)")
+                self.performSegueWithIdentifier("showHome", sender: nil)
+                
             }
         }
-        
-        
-        //        FIRAuth.auth()?.signInWithEmail("yinkokpheng@gmail.com", password: "123456") { (user, error) in
-        //            if error != nil {
-        //                print("Error \(error.debugDescription)")
-        //                return
-        //            }
-        //
-        //            if let user = FIRAuth.auth()?.currentUser {
-        //                // User is signed in.
-        //                print(user.email)
-        //            } else {
-        //                // No user is signed in.
-        //                print("NO User")
-        //            }
-        //        }
     }
-
+    
+    // MARK: Firebase Reset Password
     @IBAction func forgetPassword(sender: AnyObject) {
-        let alertVC = UIAlertController(title: "Error", message: "Sorry. Your email address has not yet been verified. Do you want us to send another verification email to =yinkokpheng@gmail.", preferredStyle: .Alert)
+        let alertVC = UIAlertController(title: "Reset Password", message: "Please enter your email. we will send reset password link to your email.", preferredStyle: .Alert)
         
         // Add the text field for text entry.
         alertVC.addTextFieldWithConfigurationHandler { textField in
@@ -107,13 +98,13 @@ class SignInTableViewController: UITableViewController {
              secure entry.
              */
             NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.handleTextFieldTextDidChangeNotification(_:)), name: UITextFieldTextDidChangeNotification, object: textField)
-           
-           
         }
-
         
+        // Alert action Ok
         let alertActionOkay = UIAlertAction(title: "Okay", style: .Default) {
             (_) in
+            
+            // When user click Ok, Request to firebase to send password reset to user email
             FIRAuth.auth()?.sendPasswordResetWithEmail(self.email) { error in
                 if let error = error {
                     // An error happened.
@@ -125,7 +116,7 @@ class SignInTableViewController: UITableViewController {
             }
         }
         
-
+        
         let alertActionCancel = UIAlertAction(title: "Cancel", style: .Default, handler: nil)
         
         alertVC.addAction(alertActionOkay)
@@ -134,13 +125,106 @@ class SignInTableViewController: UITableViewController {
     }
     
     // MARK: - UITextFieldTextDidChangeNotification
-    
     func handleTextFieldTextDidChangeNotification(notification: NSNotification) {
         let textField = notification.object as! UITextField
         
         email = textField.text!
         print("TextDidChangeNotification \(email)")
     }
-
+    
+    // MARK: Facebook Login Delegate Method
+    func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
+        
+        loadingIndicator.startAnimating()
+        // Check if error occur
+        if error != nil {
+            // error happen
+            loadingIndicator.startAnimating()
+            print(error.localizedDescription)
+            return
+        }else if (result.isCancelled){
+            loadingIndicator.startAnimating()
+            print("Cancelled")
+            return
+        }else{
+            //fetchProfile()
+            firebaseLoginWithCredential()
+            print("Successfull login in with facebook...")
+        }
+    }
+    
+    func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
+        print("Log Out")
+    }
+    
+    // Custom method for custom fb login button
+    func handleCustomFBLogin() {
+        let parameters = ["email", "public_profile", "user_friends"]
+        
+        // Call facebook login method
+        FBSDKLoginManager().logInWithReadPermissions(parameters, fromViewController: self) { (result, error) in
+            // Check if error occur
+            if error != nil {
+                // error happen
+                print(error.localizedDescription)
+                return
+            }else if (result.isCancelled){
+                print("Cancelled")
+                return
+            }else{
+                // Logged in
+                if result.grantedPermissions.contains("public_profile"){
+                    if let token = FBSDKAccessToken.currentAccessToken(){
+                        print(token.tokenString)
+                        //self.fetchProfile()
+                        self.firebaseLoginWithCredential()
+                    }
+                }
+            }
+        }
+    }
+    
+    // Get profile
+    func fetchProfile() {
+        print("fetch profile")
+        
+        // Create facebook graph with fields
+        FBSDKGraphRequest(graphPath: "/me", parameters: ["fields":"id,name,email"]).startWithCompletionHandler { (connection, result, error) in
+            // Check if error occur
+            if error != nil {
+                // error happen
+                print(error.localizedDescription)
+                return
+            }
+            print(result)
+        }
+    }
+    
+    // Firebase Login With Credential
+    func firebaseLoginWithCredential() {
+        let accessToken = FBSDKAccessToken.currentAccessToken()
+        
+        // Check token string have don't have -> return
+        guard let accessTokenString = accessToken.tokenString else{
+            return
+        }
+        
+        
+        // if have -> process login with credential
+        let credentials = FIRFacebookAuthProvider.credentialWithAccessToken(accessTokenString)
+        
+        FIRAuth.auth()?.signInWithCredential(credentials, completion: { (user, error) in
+            // Check if error occur
+            if error != nil {
+                // error happen
+                print("Something went wrong with our FB user", error)
+                return
+            }
+            self.loadingIndicator.stopAnimating()
+            print("Successfully logged in with our user", user)
+            self.performSegueWithIdentifier("showHome", sender: nil)
+        })
+    }
+    
 }
 

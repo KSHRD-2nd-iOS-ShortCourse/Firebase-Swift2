@@ -8,6 +8,7 @@
 
 import UIKit
 import FirebaseAuth
+import FBSDKLoginKit
 
 private let reuseIdentifier = "Cell"
 
@@ -93,7 +94,12 @@ class HomeCollectionViewController: UICollectionViewController {
     */
     @IBAction func signOut(sender: AnyObject) {
     
+        // signs the user out of the Firebase app
         try! FIRAuth.auth()!.signOut()
+        
+        // signs the user out of the Facebook app
+        FBSDKAccessToken.setCurrentAccessToken(nil)
+        FBSDKLoginManager().logOut()
         self.dismissViewControllerAnimated(true, completion: nil)
        
     }
