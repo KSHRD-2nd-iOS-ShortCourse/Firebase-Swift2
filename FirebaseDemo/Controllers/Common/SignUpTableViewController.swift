@@ -7,8 +7,9 @@
 //
 
 import UIKit
-import Firebase
 import FirebaseAuth
+import FirebaseStorage
+import FirebaseDatabase
 
 class SignUpTableViewController: UITableViewController {
     
@@ -20,7 +21,7 @@ class SignUpTableViewController: UITableViewController {
         super.viewDidLoad()
     }
     
-    // MARK: - Table view data source    
+    // MARK: - Table view data source
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -56,7 +57,7 @@ class SignUpTableViewController: UITableViewController {
                     print("----> Verification Turn Off")
                     print("No Email Sent \(user!.email!)")
                 }
-                
+            
                 try! FIRAuth.auth()?.signOut()
             }
         }

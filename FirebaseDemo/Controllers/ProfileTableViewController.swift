@@ -29,68 +29,76 @@ class ProfileTableViewController: UITableViewController {
             // Do NOT use this value to authenticate with
             // your backend server, if you have one. Use
             
-            self.nameLabel.text = name
-            // let data = NSData(contentsOfURL: photoUrl!)
-            // self.profileImageView.image = UIImage(data: data!)
             
-            self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2
-            
-            
-            // MARK: **** START Firebase Store
-            // ### Load high resolution image and if have image don't request to facebook
-            
-            let storage = FIRStorage.storage()
-            let storageRef = storage.referenceForURL("gs://fir-swift2.appspot.com")
-            
-            storageRef.dataWithMaxSize(1 * 1024 * 1024, completion: { (data, error) in
-                if error != nil{
-                    print("Unable to download image")
-                }else{
-                    if data != nil {
-                        print("User already has an image, no need to download from facebook")
-                        self.profileImageView.image = UIImage(data: data!)
-                    }
-                }
-            })
-            
-            if self.profileImageView.image == nil {
-                // Get profile pic
-                var profilePicture =  FBSDKGraphRequest(graphPath: "me/picture", parameters: ["height":"300", "width":"300", "redirect":false], HTTPMethod: "GET").startWithCompletionHandler { (connection, result, error) in
-                    // Check if error occur
-                    if error != nil {
-                        // error happen
-                        print(error.localizedDescription)
-                        return
-                    }
-                    
-                    // Cast to NSDictionary to user objectForKey method
-                    let dictionary = result as? NSDictionary
-                    let data = dictionary?.objectForKey("data") // get data
-                    
-                    let urlPic = data?.objectForKey("url") as! String // get url
-                    
-                    // Convert url to nsdata
-                    if let imageData = NSData(contentsOfURL: NSURL(string: urlPic)!){
-                        // Get firebase storage path
-                        let profilePicRef = storageRef.child(user.uid+"/profile_pic.jpg")
-                        
-                        // Upload image to firebase storage
-                        let uploadTask = profilePicRef.putData(imageData, metadata: nil){
-                            metadata, error in
-                            if error == nil {
-                                let downloadUrl = metadata?.downloadURL()
-                                
-                            }else{
-                                print("Error in downloading image")
-                            }
+            // Get Facebook Token
+            if let accessTokenString = FBSDKAccessToken.currentAccessToken(){
+                
+                self.nameLabel.text = name
+                // let data = NSData(contentsOfURL: photoUrl!)
+                // self.profileImageView.image = UIImage(data: data!)
+                
+                self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2
+                
+                
+                // MARK: **** START Firebase Store
+                // ### Load high resolution image and if have image don't request to facebook
+                
+                let storage = FIRStorage.storage()
+                let storageRef = storage.referenceForURL("gs://fir-swift2.appspot.com")
+                
+                storageRef.dataWithMaxSize(1 * 1024 * 1024, completion: { (data, error) in
+                    if error != nil{
+                        print("Unable to download image \(error?.localizedDescription)")
+                    }else{
+                        if data != nil {
+                            print("User already has an image, no need to download from facebook")
+                            self.profileImageView.image = UIImage(data: data!)
                         }
-                        self.profileImageView.image = UIImage(data: imageData)
                     }
-                    print(result)
+                })
+                
+                if self.profileImageView.image == nil {
+                    // Get profile pic
+                    var profilePicture =  FBSDKGraphRequest(graphPath: "me/picture", parameters: ["height":"300", "width":"300", "redirect":false], HTTPMethod: "GET").startWithCompletionHandler { (connection, result, error) in
+                        // Check if error occur
+                        if error != nil {
+                            // error happen
+                            print(error.localizedDescription)
+                            return
+                        }
+                        
+                        // Cast to NSDictionary to user objectForKey method
+                        let dictionary = result as? NSDictionary
+                        let data = dictionary?.objectForKey("data") // get data
+                        
+                        let urlPic = data?.objectForKey("url") as! String // get url
+                        
+                        // Convert url to nsdata
+                        if let imageData = NSData(contentsOfURL: NSURL(string: urlPic)!){
+                            // Get firebase storage path
+                            let profilePicRef = storageRef.child(user.uid+"/profile_pic.jpg")
+                            
+                            // Upload image to firebase storage
+                            let uploadTask = profilePicRef.putData(imageData, metadata: nil){
+                                metadata, error in
+                                if error == nil {
+                                    let downloadUrl = metadata?.downloadURL()
+                                    
+                                }else{
+                                    print("Error in downloading image \(error?.localizedDescription)")
+                                }
+                            }
+                            self.profileImageView.image = UIImage(data: imageData)
+                        }
+                        print(result)
+                    }
                 }
+                // MARK:  Start Firebase Store END ****
+                
+                
+            }else{
+                self.nameLabel.text = email!
             }
-            // MARK:  Start Firebase Store END ****
-            
         } else {
             // No user is signed in.
         }

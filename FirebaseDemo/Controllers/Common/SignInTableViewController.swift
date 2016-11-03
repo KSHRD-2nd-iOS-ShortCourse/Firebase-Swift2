@@ -223,7 +223,7 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
             
             /* #### This code is user after create register user screen  #### */
             
-            // When the user logs in for the frist time, we'll store the users name and the users email on theri profile page.
+            // When the user logs in for the frist time, we'll store the users name and the users email on their profile page.
             // also store the small version of the profile picture in the database and in the storage
             
             if error == nil {

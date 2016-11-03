@@ -34,12 +34,12 @@ class UserCollectionViewController: UICollectionViewController {
             for(userId, details) in self.usersDic!{
                 
                 // Get image url and name
-                let img = details.objectForKey("profile_pic_small") as! String
+                let img = details.objectForKey("profile_pic_small") as? String
                 let name = details.objectForKey("name") as! String
                 let firstName = name.componentsSeparatedByString(" ")[0]
                 
                 // Set image and name to array
-                self.userImagesArray.append(img)
+                self.userImagesArray.append(img ?? "http://s3.amazonaws.com/37assets/svn/765-default-avatar.png")
                 self.userNamesArray.append(firstName)
                 self.collectionView?.reloadData()
             }
