@@ -1,27 +1,46 @@
 //
-//  HomeCollectionViewController.swift
+//  UserCollectionViewController.swift
 //  FirebaseDemo
 //
-//  Created by Kokpheng on 10/28/16.
+//  Created by Kokpheng on 11/3/16.
 //  Copyright © 2016 Kokpheng. All rights reserved.
 //
 
 import UIKit
-import FirebaseAuth
-import FBSDKLoginKit
+import FirebaseDatabase
 
-private let reuseIdentifier = "Cell"
+private let reuseIdentifier = "UserCell"
 
-class HomeCollectionViewController: UICollectionViewController {
+class UserCollectionViewController: UICollectionViewController {
 
+    var databaseRef = FIRDatabase.database().reference()
+    var usersDic = NSDictionary?()
+    
+    var userNamesArray = [String]()
+    var userImagesArray = [String]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.databaseRef.child("user_profile").observeEventType(.Value, withBlock: { (snapshot) in
+            self.usersDic = snapshot.value as? NSDictionary
+            for(userId, details) in self.usersDic!{
+                let img = details.objectForKey("profile_pic_small") as! String
+                let name = details.objectForKey("name") as! String
+                let firstName = name.componentsSeparatedByString(" ")[0]
+                
+                self.userImagesArray.append(img)
+                self.userNamesArray.append(firstName)
+                self.collectionView?.reloadData()
+            }
+        })
+        
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Register cell classes
-        self.collectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+       // self.collectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
         // Do any additional setup after loading the view.
     }
@@ -44,21 +63,25 @@ class HomeCollectionViewController: UICollectionViewController {
     // MARK: UICollectionViewDataSource
 
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+      
+        return 1
     }
 
 
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
-        return 0
+        return self.userImagesArray.count
     }
 
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath)
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! UserCollectionViewCell
     
         // Configure the cell
     
+        let imageUrl = NSURL(string: userImagesArray[indexPath.row])
+        let imageData = NSData(contentsOfURL: imageUrl!)
+        
+        cell.profileImageView.image = UIImage(data: imageData!)
+        cell.nameLabel.text = userNamesArray[indexPath.row]
         return cell
     }
 
@@ -92,16 +115,5 @@ class HomeCollectionViewController: UICollectionViewController {
     
     }
     */
-    @IBAction func signOut(sender: AnyObject) {
-    
-        // signs the user out of the Firebase app
-        try! FIRAuth.auth()!.signOut()
-        
-        // signs the user out of the Facebook app
-        FBSDKAccessToken.setCurrentAccessToken(nil)
-        FBSDKLoginManager().logOut()
-        self.dismissViewControllerAnimated(true, completion: nil)
-       
-    }
 
 }
