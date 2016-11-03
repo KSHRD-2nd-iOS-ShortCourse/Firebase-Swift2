@@ -13,7 +13,6 @@ import FirebaseAuth
 class SignUpTableViewController: UITableViewController {
     
     @IBOutlet weak var usernameTextField: UITextField!
-    
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var emailVerificationSwitch: UISwitch!
     
@@ -30,13 +29,18 @@ class SignUpTableViewController: UITableViewController {
         return 5
     }
     
+    // MARK: - Firebase Sign Up Action
     @IBAction func signUpAction(sender: AnyObject) {
+        
+        // Call firebase create user
         FIRAuth.auth()?.createUserWithEmail(usernameTextField.text!, password: passwordTextField.text!) { (user, error) in
             
             // Create account error
             if error != nil {
                 print("Error \(error?.localizedDescription)")
             }else{
+                
+                // Check Verification Swift
                 if self.emailVerificationSwitch.on {
                     print("----> Verification Turn On")
                     user!.sendEmailVerificationWithCompletion({ error in

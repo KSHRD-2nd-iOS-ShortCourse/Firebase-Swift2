@@ -9,8 +9,8 @@
 import UIKit
 
 class UserCollectionViewCell: UICollectionViewCell {
-    @IBOutlet var profileImageView: UIImageView!
     
+    @IBOutlet var profileImageView: UIImageView!
     @IBOutlet var nameLabel: UILabel!
     
     override func layoutSubviews() {
@@ -22,6 +22,4 @@ class UserCollectionViewCell: UICollectionViewCell {
         self.profileImageView.layer.masksToBounds = true
         self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2
     }
-    
-    
 }

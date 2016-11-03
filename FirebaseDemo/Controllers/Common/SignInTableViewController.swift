@@ -23,10 +23,7 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
     
     @IBOutlet var loadingIndicator: UIActivityIndicatorView!
     
-    
-    @IBAction func backToSignIn(segue : UIStoryboardSegue){
-        
-    }
+    @IBAction func backToSignIn(segue : UIStoryboardSegue){ }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,17 +42,15 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
         // Check Firebase current user
         if let user = FIRAuth.auth()?.currentUser{
             // User is signed in.
-            print("DidChangeListener : \(user.email)")
-            print ("Email verified. Signing in...\(user.email)")
+            print("DidChangeListener Email verified. Signing in...: \(user.email)")
             self.performSegueWithIdentifier("showHome", sender: nil)
-            
         }else{
             // No user is signed in.
             print("DidChangeListener : NO user sign in")
         }
     }
     
-    // MARK : Firebase SignIn
+    // MARK: - Firebase SignIn
     @IBAction func signIn(sender: AnyObject) {
         // Firebase SignIn with Email
         FIRAuth.auth()?.signInWithEmail(usernameTextField.text!, password: passwordTextField.text!) { (user, error) in
@@ -87,7 +82,7 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
         }
     }
     
-    // MARK: Firebase Reset Password
+    // MARK: - Firebase Reset Password
     @IBAction func forgetPassword(sender: AnyObject) {
         let alertVC = UIAlertController(title: "Reset Password", message: "Please enter your email. we will send reset password link to your email.", preferredStyle: .Alert)
         
@@ -118,7 +113,6 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
             }
         }
         
-        
         let alertActionCancel = UIAlertAction(title: "Cancel", style: .Default, handler: nil)
         
         alertVC.addAction(alertActionOkay)
@@ -133,6 +127,7 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
         email = textField.text!
         print("TextDidChangeNotification \(email)")
     }
+    
     
     // MARK: Facebook Login Delegate Method
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
@@ -159,6 +154,7 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
         print("Log Out")
     }
     
+    // MARK: Facebook Custom Method
     // Custom method for custom fb login button
     func handleCustomFBLogin() {
         let parameters = ["email", "public_profile", "user_friends"]
@@ -186,7 +182,7 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
         }
     }
     
-    // Get profile
+    // MARK: Facebook Get Profile
     func fetchProfile() {
         print("fetch profile")
         
@@ -202,15 +198,15 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
         }
     }
     
-    // Firebase Login With Credential
+    // MARK: Firebase Login With Credential
     func firebaseLoginWithCredential() {
+        // Get Facebook Token
         let accessToken = FBSDKAccessToken.currentAccessToken()
         
         // Check token string have don't have -> return
         guard let accessTokenString = accessToken.tokenString else{
             return
         }
-        
         
         // if have -> process login with credential
         let credentials = FIRFacebookAuthProvider.credentialWithAccessToken(accessTokenString)
@@ -225,6 +221,7 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
             self.loadingIndicator.stopAnimating()
             print("Successfully logged in with our user", user)
             
+            /* #### This code is user after create register user screen  #### */
             
             // When the user logs in for the frist time, we'll store the users name and the users email on theri profile page.
             // also store the small version of the profile picture in the database and in the storage
@@ -266,7 +263,7 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
                     }
                 })
             }
-            
+            /* #### This code is user after create register user screen  #### */
             
             
             

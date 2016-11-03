@@ -14,11 +14,13 @@ import FBSDKLoginKit
 class ProfileTableViewController: UITableViewController {
     
     @IBOutlet var profileImageView: UIImageView!
-    
     @IBOutlet var nameLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        /* ### Load User from firebase then display to control on screen */
+        // Check if have user
         if let user = FIRAuth.auth()?.currentUser {
             let name = user.displayName
             let email = user.email
@@ -28,15 +30,16 @@ class ProfileTableViewController: UITableViewController {
             // your backend server, if you have one. Use
             
             self.nameLabel.text = name
-            //            let data = NSData(contentsOfURL: photoUrl!)
-            //            self.profileImageView.image = UIImage(data: data!)
+            // let data = NSData(contentsOfURL: photoUrl!)
+            // self.profileImageView.image = UIImage(data: data!)
             
             self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2
             
             
             // MARK: **** START Firebase Store
-            let storage = FIRStorage.storage()
+            // ### Load high resolution image and if have image don't request to facebook
             
+            let storage = FIRStorage.storage()
             let storageRef = storage.referenceForURL("gs://fir-swift2.appspot.com")
             
             storageRef.dataWithMaxSize(1 * 1024 * 1024, completion: { (data, error) in
@@ -60,13 +63,18 @@ class ProfileTableViewController: UITableViewController {
                         return
                     }
                     
+                    // Cast to NSDictionary to user objectForKey method
                     let dictionary = result as? NSDictionary
-                    let data = dictionary?.objectForKey("data")
+                    let data = dictionary?.objectForKey("data") // get data
                     
-                    let urlPic = data?.objectForKey("url") as! String
+                    let urlPic = data?.objectForKey("url") as! String // get url
                     
+                    // Convert url to nsdata
                     if let imageData = NSData(contentsOfURL: NSURL(string: urlPic)!){
+                        // Get firebase storage path
                         let profilePicRef = storageRef.child(user.uid+"/profile_pic.jpg")
+                        
+                        // Upload image to firebase storage
                         let uploadTask = profilePicRef.putData(imageData, metadata: nil){
                             metadata, error in
                             if error == nil {
@@ -76,7 +84,6 @@ class ProfileTableViewController: UITableViewController {
                                 print("Error in downloading image")
                             }
                         }
-                        
                         self.profileImageView.image = UIImage(data: imageData)
                     }
                     print(result)
@@ -89,10 +96,7 @@ class ProfileTableViewController: UITableViewController {
         }
     }
     
-    
-    
     // MARK: - Table view data source
-    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -101,6 +105,7 @@ class ProfileTableViewController: UITableViewController {
         return 2
     }
     
+    // MARK: - Sign Out
     @IBAction func signOut(sender: AnyObject) {
         // signs the user out of the Firebase app
         try! FIRAuth.auth()!.signOut()
