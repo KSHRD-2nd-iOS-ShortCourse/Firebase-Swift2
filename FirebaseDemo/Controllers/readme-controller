@@ -1,0 +1,6 @@
+this controller folder is used for putting: # Base view controllers
+- view controller file
+
+We divide to two folder :
+- common : put general file
+- debugging: put loggin, breakpoints, tools...etc

@@ -1,0 +1,4 @@
+this application folder is used for putting: # App delegate and related files
+- AppDelegate
+- .plist
+- main.m

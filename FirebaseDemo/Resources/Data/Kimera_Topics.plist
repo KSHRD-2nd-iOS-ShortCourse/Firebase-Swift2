@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>name</key>
+		<string>Debugging</string>
+		<key>arguments</key>
+		<array>
+			<dict>
+				<key>name</key>
+				<string>Logging</string>
+				<key>detail</key>
+				<string>Alternative logging frameworks</string>
+				<key>viewController</key>
+				<string>KMRMLoggingViewController</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>Breakpoints</string>
+				<key>detail</key>
+				<string>huhu</string>
+				<key>viewController</key>
+				<string>KMRMBreakpointsViewController</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>LLDB</string>
+				<key>detail</key>
+				<string>Dive into LLDB debugger</string>
+				<key>viewController</key>
+				<string>KMRMLLDBViewController</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>Tools</string>
+				<key>detail</key>
+				<string>...</string>
+				<key>viewController</key>
+				<string>KMRMToolsViewController</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>MRC Issues</string>
+				<key>detail</key>
+				<string>huhu</string>
+				<key>viewController</key>
+				<string>KMRMMrcIssueViewController</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>ARC Issues</string>
+				<key>detail</key>
+				<string>huhu</string>
+				<key>viewController</key>
+				<string>KMRMArcIssuesViewController</string>
+			</dict>
+		</array>
+	</dict>
+</array>
+</plist>
