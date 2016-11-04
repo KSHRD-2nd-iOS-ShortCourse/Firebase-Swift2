@@ -18,7 +18,7 @@ class UserCollectionViewController: UICollectionViewController {
     var databaseRef = FIRDatabase.database().reference()
     
     // Property
-    var usersDic = NSDictionary?()
+    var usersDic = [String : AnyObject]?()
     var userNamesArray = [String]()
     var userImagesArray = [String]()
     
@@ -28,14 +28,14 @@ class UserCollectionViewController: UICollectionViewController {
         self.databaseRef.child("user_profile").observeEventType(.Value, withBlock: { (snapshot) in
             
             // Set Firebase object to users dictionary property
-            self.usersDic = snapshot.value as? NSDictionary
+            self.usersDic = snapshot.value as? [String : AnyObject]
             
             // Loop each user in dictionary object
             for(userId, details) in self.usersDic!{
                 
                 // Get image url and name
-                let img = details.objectForKey("profile_pic_small") as? String
-                let name = details.objectForKey("name") as! String
+                let img = details["profile_pic_small"] as? String
+                let name = details["name"] as! String
                 
                 // Set image and name to array
                 self.userImagesArray.append(img!)

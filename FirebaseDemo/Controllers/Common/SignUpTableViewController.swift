@@ -104,7 +104,8 @@ class SignUpTableViewController: UITableViewController {
                 
 
             
-               // try! FIRAuth.auth()?.signOut()
+                try! FIRAuth.auth()?.signOut()
+                self.dismissViewControllerAnimated(true, completion: nil)
             }
         }
     }

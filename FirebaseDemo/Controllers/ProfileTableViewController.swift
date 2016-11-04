@@ -67,11 +67,11 @@ class ProfileTableViewController: UITableViewController {
                             return
                         }
                         
-                        // Cast to NSDictionary to user objectForKey method
-                        let dictionary = result as? NSDictionary
-                        let data = dictionary?.objectForKey("data") // get data
+                        // Cast to Dictionary
+                        let dictionary = result as? [String : AnyObject]
+                        let data = dictionary?["data"] // get data
                         
-                        let urlPic = data?.objectForKey("url") as! String // get url
+                        let urlPic = data?["url"] as! String // get url
                         
                         // Convert url to nsdata
                         if let imageData = NSData(contentsOfURL: NSURL(string: urlPic)!){

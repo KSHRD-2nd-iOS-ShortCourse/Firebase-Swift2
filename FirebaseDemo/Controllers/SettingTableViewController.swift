@@ -16,6 +16,7 @@ class SettingTableViewController: UITableViewController {
     var ref = FIRDatabase.database().reference()
     var user = FIRAuth.auth()?.currentUser
     
+    // Outlet
     @IBOutlet var nameTextField: UITextField!
     @IBOutlet var genderTextField: UITextField!
     @IBOutlet var ageTextField: UITextField!
@@ -29,20 +30,19 @@ class SettingTableViewController: UITableViewController {
         var refHandle = self.ref.child("user_profile").observeEventType(FIRDataEventType.Value, withBlock: {(snapshot) in
             
             // Convert snapshot to Dictionary
-            let userDict = snapshot.value as! NSDictionary
+            let userDict = snapshot.value as! [String : AnyObject]
             print(userDict)
             
             // Get data of user by user id
-            let userDetails = userDict.objectForKey(self.user!.uid)
+            let userDetails = userDict[self.user!.uid]
             
             // Set value to textfield
-            self.nameTextField.text = userDetails?.objectForKey("name") as? String
-            self.genderTextField.text = userDetails?.objectForKey("gender") as? String
-            self.ageTextField.text = userDetails?.objectForKey("age") as? String
-            self.emailTextField.text = userDetails?.objectForKey("email") as? String
-            self.websiteTextField.text = userDetails?.objectForKey("website") as? String
+            self.nameTextField.text = userDetails?["name"] as? String
+            self.genderTextField.text = userDetails?["gender"] as? String
+            self.ageTextField.text = userDetails?["age"] as? String
+            self.emailTextField.text = userDetails?["email"] as? String
+            self.websiteTextField.text = userDetails?["website"] as? String
         })
-        
     }
     
     
@@ -65,7 +65,5 @@ class SettingTableViewController: UITableViewController {
         self.ref.child("user_profile").child("\(user!.uid)/age").setValue(ageTextField.text)
         self.ref.child("user_profile").child("\(user!.uid)/email").setValue(emailTextField.text)
         self.ref.child("user_profile").child("\(user!.uid)/website").setValue(websiteTextField.text)
-        
     }
-    
 }
