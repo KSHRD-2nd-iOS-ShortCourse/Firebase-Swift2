@@ -13,7 +13,7 @@ import FirebaseDatabase
 private let reuseIdentifier = "UserCell"
 
 class UserCollectionViewController: UICollectionViewController {
-
+    
     // Create database object
     var databaseRef = FIRDatabase.database().reference()
     
@@ -24,7 +24,7 @@ class UserCollectionViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // OberveEvent is listening to firebase realtime database
         // on path user_profile
         self.databaseRef.child("user_profile").observeEventType(.Value, withBlock: { (snapshot) in
@@ -54,28 +54,28 @@ class UserCollectionViewController: UICollectionViewController {
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-
+        
         // Register cell classes
         // ###### self.collectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-
+        
         // Do any additional setup after loading the view.
     }
-
- 
+    
+    
     // MARK: UICollectionViewDataSource
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
     }
-
+    
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.userImagesArray.count
     }
-
+    
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
         // Create custom cell object
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! UserCollectionViewCell
-    
+        
         // Configure the cell
         let imageUrl = NSURL(string: userImagesArray[indexPath.row])
         let imageData = NSData(contentsOfURL: imageUrl!)

@@ -59,7 +59,7 @@ class SettingTableViewController: UITableViewController {
     // MARK: Update User Profile
     @IBAction func update(sender: AnyObject) {
         
-        // Set value to firebase storage 
+        // Set value to firebase storage
         self.ref.child("user_profile").child("\(user!.uid)/name").setValue(nameTextField.text)
         self.ref.child("user_profile").child("\(user!.uid)/gender").setValue(genderTextField.text)
         self.ref.child("user_profile").child("\(user!.uid)/age").setValue(ageTextField.text)

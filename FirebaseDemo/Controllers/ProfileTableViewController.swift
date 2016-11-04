@@ -64,7 +64,7 @@ class ProfileTableViewController: UITableViewController {
                 if self.profileImageView.image == nil {
                     // Get profile pic
                     var profilePicture =  FBSDKGraphRequest(graphPath: "me/picture", parameters: ["height":"300", "width":"300", "redirect":false], HTTPMethod: "GET").startWithCompletionHandler { (connection, result, error) in
-                       
+                        
                         // Check if error occur
                         if error != nil {
                             // error happen
