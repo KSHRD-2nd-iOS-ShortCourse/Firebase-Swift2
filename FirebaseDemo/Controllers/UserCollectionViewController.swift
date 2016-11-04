@@ -14,6 +14,7 @@ private let reuseIdentifier = "UserCell"
 
 class UserCollectionViewController: UICollectionViewController {
     
+    // TODO: Step 1 Create Firebase Database and Property
     // Create database object
     var databaseRef = FIRDatabase.database().reference()
     
@@ -25,7 +26,7 @@ class UserCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // OberveEvent is listening to firebase realtime database
+        // TODO: Step 2 OberveEvent is listening to firebase realtime database
         // on path user_profile
         self.databaseRef.child("user_profile").observeEventType(.Value, withBlock: { (snapshot) in
             
@@ -71,6 +72,7 @@ class UserCollectionViewController: UICollectionViewController {
         return self.userImagesArray.count
     }
     
+    // TODO: Step 3 Configure Cell
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
         // Create custom cell object

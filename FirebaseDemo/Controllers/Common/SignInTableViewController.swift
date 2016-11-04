@@ -14,6 +14,7 @@ import FirebaseDatabase
 
 class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate {
     
+    // TODO: Step 1 Create Property
     var email = ""
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -23,11 +24,13 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
     
     @IBOutlet var loadingIndicator: UIActivityIndicatorView!
     
+    // TODO: Step 2 Back to Sign In Screen
     @IBAction func backToSignIn(segue : UIStoryboardSegue){ }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // TODO: Step 7 Facebook button configure
         // Add delegate for FacebookButton
         facebookButton.readPermissions = ["public_profile", "email", "user_friends"]
         facebookButton.delegate = self
@@ -39,7 +42,7 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
     }
     
     override func viewDidAppear(animated: Bool) {
-        // Check Firebase current user
+        // TODO: Step 6 Check Firebase current user
         if let user = FIRAuth.auth()?.currentUser{
             // User is signed in.
             print("viewDidAppear Email verified. Signing in...: \(user.email)")
@@ -50,7 +53,7 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
         }
     }
     
-    // MARK: - Firebase SignIn
+    // TODO: Step 3 - Firebase SignIn
     @IBAction func signIn(sender: AnyObject) {
         // Firebase SignIn with Email
         FIRAuth.auth()?.signInWithEmail(usernameTextField.text!, password: passwordTextField.text!) { (user, error) in
@@ -77,12 +80,11 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
             } else {
                 print ("Email verified. Signing in...\(user!.email!)")
                 self.performSegueWithIdentifier("showHome", sender: nil)
-                
             }
         }
     }
     
-    // MARK: - Firebase Reset Password
+    // TODO: Step 4 - Firebase Reset Password
     @IBAction func forgetPassword(sender: AnyObject) {
         let alertVC = UIAlertController(title: "Reset Password", message: "Please enter your email. we will send reset password link to your email.", preferredStyle: .Alert)
         
@@ -120,7 +122,7 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
         self.presentViewController(alertVC, animated: true, completion: nil)
     }
     
-    // MARK: - UITextFieldTextDidChangeNotification
+    // TODO: Step 5 - UITextFieldTextDidChangeNotification
     func handleTextFieldTextDidChangeNotification(notification: NSNotification) {
         let textField = notification.object as! UITextField
         
@@ -129,7 +131,7 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
     }
     
     
-    // MARK: Facebook Login Delegate Method
+    // TODO: Step 8 Facebook Login Button Delegate Method
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
         
         loadingIndicator.startAnimating()
@@ -150,11 +152,12 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
         }
     }
     
+    // TODO: Step 9 Facebook Button Logout
     func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
         print("Log Out")
     }
     
-    // MARK: Facebook Custom Method
+    // TODO: Step 10 Facebook Custom Method
     // Custom method for custom fb login button
     func handleCustomFBLogin() {
         let parameters = ["email", "public_profile", "user_friends"]
@@ -182,7 +185,7 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
         }
     }
     
-    // MARK: Facebook Get Profile
+    // TODO: Step 11 Facebook Get Profile
     func fetchProfile() {
         print("fetch profile")
         
@@ -198,7 +201,7 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
         }
     }
     
-    // MARK: Firebase Login With Credential
+    // TODO: Step 12 Firebase Login With Credential
     func firebaseLoginWithCredential() {
         // Get Facebook Token
         let accessToken = FBSDKAccessToken.currentAccessToken()
@@ -211,6 +214,7 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
         // if have -> process login with credential
         let credentials = FIRFacebookAuthProvider.credentialWithAccessToken(accessTokenString)
         
+        // TODO: Step 13 Sign in with Credential
         FIRAuth.auth()?.signInWithCredential(credentials, completion: { (user, error) in
             // Check if error occur
             if error != nil {
@@ -221,6 +225,8 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
             self.loadingIndicator.stopAnimating()
             print("Successfully logged in with our user", user)
             
+            
+            // TODO: Step 14 Save facebook image to Firebase Storage and url to Firebase Realtime 
             /* #### This code is user after create register user screen  #### */
             
             // When the user logs in for the frist time, we'll store the users name and the users email on their profile page.

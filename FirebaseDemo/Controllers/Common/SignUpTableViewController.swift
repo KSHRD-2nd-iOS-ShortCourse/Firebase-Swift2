@@ -21,10 +21,10 @@ class SignUpTableViewController: UITableViewController {
         super.viewDidLoad()
     }
 
-    // MARK: - Firebase Sign Up Action
+    // TODO: Step 1 - Firebase Sign Up Action
     @IBAction func signUpAction(sender: AnyObject) {
         
-        // Call firebase create user
+        // TODO: Step 2 Call firebase create user
         FIRAuth.auth()?.createUserWithEmail(usernameTextField.text!, password: passwordTextField.text!) { (user, error) in
             
             // Create account error
@@ -32,7 +32,7 @@ class SignUpTableViewController: UITableViewController {
                 print("Error \(error?.localizedDescription)")
             }else{
                 
-                // Check Verification Swift
+                // TODO: Step 3 Check Verification Swift
                 if self.emailVerificationSwitch.on {
                     print("----> Verification Turn On")
                     user!.sendEmailVerificationWithCompletion({ error in
@@ -49,6 +49,8 @@ class SignUpTableViewController: UITableViewController {
                     print("No Email Sent \(user!.email!)")
                 }
                 
+                
+                // TODO: Step 5
                 /* #### This code is user after create register user screen  #### */
                 
                 // When the user logs in for the frist time, we'll store the users name and the users email on their profile page.
@@ -57,6 +59,7 @@ class SignUpTableViewController: UITableViewController {
                 if error == nil {
                     let storage = FIRStorage.storage()
                     
+                    // TODO: Step 6 Create Firebase Storage, Realtime Database, UserID
                     // create firebase storage reference
                     let storageRef = storage.referenceForURL("gs://fir-swift2.appspot.com")
                     let profilePicRef = storageRef.child(user!.uid + "/profile_pic_small.jpg")
@@ -67,6 +70,7 @@ class SignUpTableViewController: UITableViewController {
                     // create firebase realtime database reference
                     let databaseRef = FIRDatabase.database().reference()
                     
+                    // TODO: Step 7 Get user profile_pic_small
                     databaseRef.child("user_profile").child(userId!).child("profile_pic_small").observeEventType(.Value, withBlock: { (snapshot) in
                         
                         let profile_pic = snapshot.value as? String?
@@ -103,7 +107,7 @@ class SignUpTableViewController: UITableViewController {
                 }
                 /* #### This code is user after create register user screen  #### */
                 
-                
+                // TODO: Step 4 Sign Out after create account
                 try! FIRAuth.auth()?.signOut()
                 self.dismissViewControllerAnimated(true, completion: nil)
             }

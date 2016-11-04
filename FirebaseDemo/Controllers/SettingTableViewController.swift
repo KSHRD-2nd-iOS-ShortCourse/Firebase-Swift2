@@ -12,6 +12,7 @@ import FirebaseDatabase
 
 class SettingTableViewController: UITableViewController {
     
+    // TODO: Step 1 Create reference and outlet
     // Create Firebase database and auth object
     var ref = FIRDatabase.database().reference()
     var user = FIRAuth.auth()?.currentUser
@@ -26,10 +27,10 @@ class SettingTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Load data from firebase realtime storage to control
+        // TODO: Step 3 Load data from firebase realtime storage to control
         var refHandle = self.ref.child("user_profile").observeEventType(FIRDataEventType.Value, withBlock: {(snapshot) in
             
-            // Convert snapshot to Dictionary
+            // TODO: Step 4 Convert snapshot to Dictionary
             let userDict = snapshot.value as! [String : AnyObject]
             print(userDict)
             
@@ -45,7 +46,7 @@ class SettingTableViewController: UITableViewController {
         })
     }
     
-    // MARK: Update User Profile
+    // TODO: Step 2 Update User Profile
     @IBAction func update(sender: AnyObject) {
         
         // Set value to firebase storage

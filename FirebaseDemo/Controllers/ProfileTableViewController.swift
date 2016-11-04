@@ -13,6 +13,7 @@ import FBSDKLoginKit
 
 class ProfileTableViewController: UITableViewController {
     
+    // TODO: Step 1 Property
     @IBOutlet var profileImageView: UIImageView!
     @IBOutlet var nameLabel: UILabel!
     
@@ -20,7 +21,7 @@ class ProfileTableViewController: UITableViewController {
         super.viewDidLoad()
         
         /* ### Load User from firebase then display to control on screen */
-        // Check if have user
+        // TODO: Step 2 Check if have user
         if let user = FIRAuth.auth()?.currentUser {
             
             // Get property from object User
@@ -32,7 +33,7 @@ class ProfileTableViewController: UITableViewController {
             // your backend server, if you have one. Use
             
             
-            // Get Facebook Token
+            // TODO: Step 3 Get Facebook Token
             if let accessTokenString = FBSDKAccessToken.currentAccessToken(){
                 
                 self.nameLabel.text = name
@@ -42,13 +43,14 @@ class ProfileTableViewController: UITableViewController {
                 self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2
                 
                 
+                // TODO: Step 4
                 // MARK: **** START Firebase Store
                 // ### Load high resolution image and if have image don't request to facebook
                 
                 let storage = FIRStorage.storage()
                 let storageRef = storage.referenceForURL("gs://fir-swift2.appspot.com")
                 
-                
+                // TODO: Step 5
                 // #### Load in mage from firebase
                 storageRef.dataWithMaxSize(1 * 1024 * 1024, completion: { (data, error) in
                     if error != nil{
@@ -61,6 +63,7 @@ class ProfileTableViewController: UITableViewController {
                     }
                 })
                 
+                // TODO: Step 6
                 if self.profileImageView.image == nil {
                     // Get profile pic
                     var profilePicture =  FBSDKGraphRequest(graphPath: "me/picture", parameters: ["height":"300", "width":"300", "redirect":false], HTTPMethod: "GET").startWithCompletionHandler { (connection, result, error) in
@@ -102,6 +105,7 @@ class ProfileTableViewController: UITableViewController {
                 // MARK:  Start Firebase Store END ****
                 
             }else{
+                // TODO: Step 7 Sign in with Firebase Account
                 self.nameLabel.text = email!
                 self.profileImageView.image = UIImage(named: "default-avatar")
             }
@@ -110,16 +114,7 @@ class ProfileTableViewController: UITableViewController {
         }
     }
     
-    // MARK: - Table view data source
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
-    }
-    
-    // MARK: - Sign Out
+    // TODO: Step 8 Sign Out
     @IBAction func signOut(sender: AnyObject) {
         // signs the user out of the Firebase app
         try! FIRAuth.auth()!.signOut()
