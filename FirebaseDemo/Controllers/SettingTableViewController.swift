@@ -45,17 +45,6 @@ class SettingTableViewController: UITableViewController {
         })
     }
     
-    
-    // MARK: - Table view data source
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
-    }
-    
-    
     // MARK: Update User Profile
     @IBAction func update(sender: AnyObject) {
         
