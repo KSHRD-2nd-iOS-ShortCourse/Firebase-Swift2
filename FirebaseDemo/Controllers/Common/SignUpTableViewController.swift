@@ -66,22 +66,32 @@ class SignUpTableViewController: UITableViewController {
                 if error == nil {
                     let storage = FIRStorage.storage()
                     
+                    // create firebase storage reference
                     let storageRef = storage.referenceForURL("gs://fir-swift2.appspot.com")
                     let profilePicRef = storageRef.child(user!.uid + "/profile_pic_small.jpg")
                     
                     // store the userID
                     let userId = user?.uid
                     
+                    // create firebase realtime database reference
                     let databaseRef = FIRDatabase.database().reference()
+                    
                     databaseRef.child("user_profile").child(userId!).child("profile_pic_small").observeEventType(.Value, withBlock: { (snapshot) in
+                        
                         let profile_pic = snapshot.value as? String?
-                        print("in block")
-                        if profile_pic == nil{
+                        
+                        // if no image
+                        if profile_pic == nil {
                             if let imageData = UIImagePNGRepresentation(UIImage(named: "default-avatar")!){
+                                
+                                // Upload image to firebase storage
                                 let uploadTask = profilePicRef.putData(imageData, metadata: nil){
                                     metadata, error in
                                     if error == nil {
+                                        // get uploaded image url
                                         let dowloadURL = metadata?.downloadURL()
+                                        
+                                        // save image url to firebase realtime database profile_pic_small
                                         databaseRef.child("user_profile").child("\(user!.uid)/profile_pic_small").setValue(dowloadURL?.absoluteString)
                                     }else{
                                         print("error in downloading image")
@@ -89,7 +99,7 @@ class SignUpTableViewController: UITableViewController {
                                 }
                             }
                             
-                            // store data into the users profile page
+                            // store data into the users profile page in firebase realtime
                             databaseRef.child("user_profile").child("\(user!.uid)/name").setValue(user?.displayName ?? "")
                             databaseRef.child("user_profile").child("\(user!.uid)/gender").setValue("")
                             databaseRef.child("user_profile").child("\(user!.uid)/age").setValue("")
@@ -102,8 +112,7 @@ class SignUpTableViewController: UITableViewController {
                 }
                 /* #### This code is user after create register user screen  #### */
                 
-
-            
+                
                 try! FIRAuth.auth()?.signOut()
                 self.dismissViewControllerAnimated(true, completion: nil)
             }

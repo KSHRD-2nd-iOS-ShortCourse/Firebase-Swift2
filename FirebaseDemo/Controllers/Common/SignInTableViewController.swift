@@ -42,11 +42,11 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
         // Check Firebase current user
         if let user = FIRAuth.auth()?.currentUser{
             // User is signed in.
-            print("DidChangeListener Email verified. Signing in...: \(user.email)")
+            print("viewDidAppear Email verified. Signing in...: \(user.email)")
             self.performSegueWithIdentifier("showHome", sender: nil)
         }else{
             // No user is signed in.
-            print("DidChangeListener : NO user sign in")
+            print("viewDidAppear : NO user sign in")
         }
     }
     
@@ -238,13 +238,18 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
                 let databaseRef = FIRDatabase.database().reference()
                 databaseRef.child("user_profile").child(userId!).child("profile_pic_small").observeEventType(.Value, withBlock: { (snapshot) in
                     let profile_pic = snapshot.value as? String?
-                    print("in block")
+                    
                     if profile_pic == nil{
                         if let imageData = NSData(contentsOfURL: user!.photoURL!){
+                            // Upload image to firebase storage
                             let uploadTask = profilePicRef.putData(imageData, metadata: nil){
                                 metadata, error in
+                                
                                 if error == nil {
+                                    // get uploaded image url
                                     let dowloadURL = metadata?.downloadURL()
+                                    
+                                    // save image url to firebase realtime database profile_pic_small
                                     databaseRef.child("user_profile").child("\(user!.uid)/profile_pic_small").setValue(dowloadURL?.absoluteString)
                                 }else{
                                     print("error in downloading image")
@@ -252,7 +257,7 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
                             }
                         }
                         
-                        // store data into the users profile page
+                        // store data into the users profile page in firebase realtime
                         databaseRef.child("user_profile").child("\(user!.uid)/name").setValue(user?.displayName)
                         databaseRef.child("user_profile").child("\(user!.uid)/gender").setValue("")
                         databaseRef.child("user_profile").child("\(user!.uid)/age").setValue("")
@@ -264,7 +269,6 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
                 })
             }
             /* #### This code is user after create register user screen  #### */
-            
             
             
             self.performSegueWithIdentifier("showHome", sender: nil)

@@ -25,7 +25,14 @@ class UserCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // OberveEvent is listening to firebase realtime database
+        // on path user_profile
         self.databaseRef.child("user_profile").observeEventType(.Value, withBlock: { (snapshot) in
+            
+            // Remove all before loading data
+            self.userImagesArray.removeAll()
+            self.userNamesArray.removeAll()
+            self.usersDic?.removeAll()
             
             // Set Firebase object to users dictionary property
             self.usersDic = snapshot.value as? [String : AnyObject]

@@ -22,6 +22,8 @@ class ProfileTableViewController: UITableViewController {
         /* ### Load User from firebase then display to control on screen */
         // Check if have user
         if let user = FIRAuth.auth()?.currentUser {
+            
+            // Get property from object User
             let name = user.displayName
             let email = user.email
             let photoUrl = user.photoURL
@@ -46,6 +48,8 @@ class ProfileTableViewController: UITableViewController {
                 let storage = FIRStorage.storage()
                 let storageRef = storage.referenceForURL("gs://fir-swift2.appspot.com")
                 
+                
+                // #### Load in mage from firebase
                 storageRef.dataWithMaxSize(1 * 1024 * 1024, completion: { (data, error) in
                     if error != nil{
                         print("Unable to download image \(error?.localizedDescription)")
@@ -60,6 +64,7 @@ class ProfileTableViewController: UITableViewController {
                 if self.profileImageView.image == nil {
                     // Get profile pic
                     var profilePicture =  FBSDKGraphRequest(graphPath: "me/picture", parameters: ["height":"300", "width":"300", "redirect":false], HTTPMethod: "GET").startWithCompletionHandler { (connection, result, error) in
+                       
                         // Check if error occur
                         if error != nil {
                             // error happen
@@ -73,7 +78,7 @@ class ProfileTableViewController: UITableViewController {
                         
                         let urlPic = data?["url"] as! String // get url
                         
-                        // Convert url to nsdata
+                        // Convert url to NSData
                         if let imageData = NSData(contentsOfURL: NSURL(string: urlPic)!){
                             // Get firebase storage path
                             let profilePicRef = storageRef.child(user.uid+"/profile_pic.jpg")
@@ -81,9 +86,10 @@ class ProfileTableViewController: UITableViewController {
                             // Upload image to firebase storage
                             let uploadTask = profilePicRef.putData(imageData, metadata: nil){
                                 metadata, error in
+                                
                                 if error == nil {
+                                    // get image url after image uploaded
                                     let downloadUrl = metadata?.downloadURL()
-                                    
                                 }else{
                                     print("Error in downloading image \(error?.localizedDescription)")
                                 }
@@ -94,7 +100,6 @@ class ProfileTableViewController: UITableViewController {
                     }
                 }
                 // MARK:  Start Firebase Store END ****
-                
                 
             }else{
                 self.nameLabel.text = email!
