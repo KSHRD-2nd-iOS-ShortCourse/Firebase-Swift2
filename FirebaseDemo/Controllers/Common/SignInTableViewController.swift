@@ -7,8 +7,8 @@
 //
 
 import UIKit
-import FirebaseAuth
 import FBSDKLoginKit
+import FirebaseAuth
 import FirebaseStorage
 import FirebaseDatabase
 
@@ -238,7 +238,7 @@ class SignInTableViewController: UITableViewController, FBSDKLoginButtonDelegate
                 let databaseRef = FIRDatabase.database().reference()
                 databaseRef.child("user_profile").child(userId!).child("profile_pic_small").observeEventType(.Value, withBlock: { (snapshot) in
                     let profile_pic = snapshot.value as? String?
-                    
+                    print("in block")
                     if profile_pic == nil{
                         if let imageData = NSData(contentsOfURL: user!.photoURL!){
                             let uploadTask = profilePicRef.putData(imageData, metadata: nil){

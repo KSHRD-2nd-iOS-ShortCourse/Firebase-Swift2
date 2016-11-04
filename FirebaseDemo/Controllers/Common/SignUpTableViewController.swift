@@ -57,8 +57,54 @@ class SignUpTableViewController: UITableViewController {
                     print("----> Verification Turn Off")
                     print("No Email Sent \(user!.email!)")
                 }
+                
+                /* #### This code is user after create register user screen  #### */
+                
+                // When the user logs in for the frist time, we'll store the users name and the users email on their profile page.
+                // also store the small version of the profile picture in the database and in the storage
+                
+                if error == nil {
+                    let storage = FIRStorage.storage()
+                    
+                    let storageRef = storage.referenceForURL("gs://fir-swift2.appspot.com")
+                    let profilePicRef = storageRef.child(user!.uid + "/profile_pic_small.jpg")
+                    
+                    // store the userID
+                    let userId = user?.uid
+                    
+                    let databaseRef = FIRDatabase.database().reference()
+                    databaseRef.child("user_profile").child(userId!).child("profile_pic_small").observeEventType(.Value, withBlock: { (snapshot) in
+                        let profile_pic = snapshot.value as? String?
+                        print("in block")
+                        if profile_pic == nil{
+                            if let imageData = UIImagePNGRepresentation(UIImage(named: "default-avatar")!){
+                                let uploadTask = profilePicRef.putData(imageData, metadata: nil){
+                                    metadata, error in
+                                    if error == nil {
+                                        let dowloadURL = metadata?.downloadURL()
+                                        databaseRef.child("user_profile").child("\(user!.uid)/profile_pic_small").setValue(dowloadURL?.absoluteString)
+                                    }else{
+                                        print("error in downloading image")
+                                    }
+                                }
+                            }
+                            
+                            // store data into the users profile page
+                            databaseRef.child("user_profile").child("\(user!.uid)/name").setValue(user?.displayName ?? "")
+                            databaseRef.child("user_profile").child("\(user!.uid)/gender").setValue("")
+                            databaseRef.child("user_profile").child("\(user!.uid)/age").setValue("")
+                            databaseRef.child("user_profile").child("\(user!.uid)/email").setValue(user?.email)
+                            databaseRef.child("user_profile").child("\(user!.uid)/website").setValue("")
+                        }else{
+                            print("User has logged in earlier")
+                        }
+                    })
+                }
+                /* #### This code is user after create register user screen  #### */
+                
+
             
-                try! FIRAuth.auth()?.signOut()
+               // try! FIRAuth.auth()?.signOut()
             }
         }
     }

@@ -98,6 +98,7 @@ class ProfileTableViewController: UITableViewController {
                 
             }else{
                 self.nameLabel.text = email!
+                self.profileImageView.image = UIImage(named: "default-avatar")
             }
         } else {
             // No user is signed in.
