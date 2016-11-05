@@ -50,9 +50,12 @@ class ProfileTableViewController: UITableViewController {
                 let storage = FIRStorage.storage()
                 let storageRef = storage.referenceForURL("gs://fir-swift2.appspot.com")
                 
+                // Get firebase storage path
+                let profilePicRef = storageRef.child(user.uid+"/profile_pic.jpg")
+
                 // TODO: Step 5
                 // #### Load in mage from firebase
-                storageRef.dataWithMaxSize(1 * 1024 * 1024, completion: { (data, error) in
+                profilePicRef.dataWithMaxSize(1 * 1024 * 1024, completion: { (data, error) in
                     if error != nil{
                         print("Unable to download image \(error?.localizedDescription)")
                     }else{
@@ -83,8 +86,6 @@ class ProfileTableViewController: UITableViewController {
                         
                         // Convert url to NSData
                         if let imageData = NSData(contentsOfURL: NSURL(string: urlPic)!){
-                            // Get firebase storage path
-                            let profilePicRef = storageRef.child(user.uid+"/profile_pic.jpg")
                             
                             // Upload image to firebase storage
                             let uploadTask = profilePicRef.putData(imageData, metadata: nil){
